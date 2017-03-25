@@ -195,7 +195,8 @@ public class UIWrapContent : MonoBehaviour
 		for (int i = 0, imax = MChildren.Count; i < imax; ++i)
 		{
 			Transform t = MChildren[i];
-			t.localPosition = mHorizontal ? new Vector3(i * itemSize, 0f, 0f) : new Vector3(0f, -i * itemSize, 0f);
+            Vector3 pos = t.localPosition;
+			t.localPosition = mHorizontal ? new Vector3(i * itemSize, pos.y, 0f) : new Vector3(pos.x, -i * itemSize, 0f);
            
             UpdateItem(t, i);
 		}
@@ -358,7 +359,11 @@ public class UIWrapContent : MonoBehaviour
                     NGUITools.SetActive(t.gameObject, false);
 			}
 		}
-		mScroll.restrictWithinPanel = !allWithinRange;
+
+        //Start首次WrapContent的时候会影响ScrollView的restrictWithPanel所以注释掉。
+        //只要能保证WrapContent还没有滑到min或maxIndex的时候，底部的下一个Item的active为true，
+        //注释掉这句就不会有什么影响
+	//	mScroll.restrictWithinPanel = !allWithinRange;
 		mScroll.InvalidateBounds();
     }
 
